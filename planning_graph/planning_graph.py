@@ -147,6 +147,34 @@ class PlanningGraph(object):
 
         return self._graph
 
+    def create_with_state(self, state: set, max_num_of_levels=10):
+        self._graph = Graph(True)
+        self._graph.prop = {0: state}
+        self._graph.num_of_levels = 1
+
+        for level in range(1, max_num_of_levels):
+            self._graph = self.expand(self._graph)
+
+            goal_set = self._planning_problem.goal_state
+            index = self._graph.num_of_levels - 1
+            proposition_list = self._graph.prop[index]
+            proposition_mutex_list = self._graph.prop_mutexes[index]
+            if goal_set.issubset(proposition_list):
+                # goals in proposition list and
+                # goals not in mutex proposition list
+                goal_found = True
+                for goal_pair in list(permutations(goal_set, 2)):
+                    if goal_pair in proposition_mutex_list:
+                        goal_found = False
+                        break
+                if goal_found:
+                    break
+            elif index > 0 and self._graph.prop[index-1] == proposition_list:
+                self._graph.fixed_point = True
+                break
+
+        return self._graph
+
     def expand(self, gr: Graph) -> Graph:
         graph_result = gr
         level = gr.num_of_levels
