@@ -147,8 +147,8 @@ class PlanningGraph(object):
 
         return self._graph
 
-    def create_with_state(self, state: set, max_num_of_levels=10):
-        self._graph = Graph(True)
+    def create_with_state(self, state: set, max_num_of_levels=10, visualize = True):
+        self._graph = Graph(visualize)
         self._graph.prop = {0: state}
         self._graph.num_of_levels = 1
 
