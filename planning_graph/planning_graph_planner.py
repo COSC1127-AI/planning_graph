@@ -27,8 +27,8 @@ class GraphPlanner(object):
     def __init__(self):
         self._layered_plan: LayeredPlan = LayeredPlan()
         self._mutex = {}
-
-    def plan(self, gr: Graph, g: set):
+    # def plan(self, gr: Graph, g: set):
+    def plan(self, gr: Graph, g: set, pg: PlanningGraph):
         index = gr.num_of_levels - 1
 
         if not g.issubset(gr.prop[index]):
@@ -51,7 +51,8 @@ class GraphPlanner(object):
 
         while True:
             index += 1
-            gr = PlanningGraph.expand(gr)
+            # gr = PlanningGraph.expand(gr)
+            gr = pg.expand(gr)
             plan = self._extract(gr, g, index)
             if plan:
                 return self._layered_plan
