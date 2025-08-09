@@ -78,6 +78,29 @@ class Operator():
         self.effect_pos = set()
         self.effect_neg = set()
 
+    def __lt__(self, other):
+        if not isinstance(other, Operator):
+            return NotImplemented
+        # print("Comparing", str(self), "vs", str(other))
+        if self.operator_name < other.operator_name:
+            return True
+        elif self.operator_name == other.operator_name and len(self.variable_list) > 0:
+            for args1, args2 in zip(
+                self.variable_list.values(), other.variable_list.values()
+            ):
+                if args1 < args2:
+                    return True
+            return False
+        else:
+            return False
+
+    def __str__(self):
+        if len(self.variable_list) == 0:
+            params = ', '.join(self.variable_list.keys())
+        else:
+            params = ", ".join(self.variable_list.values())
+        return f"{self.operator_name}({params})"
+
 
 class DomainListener(pddlListener):
     def __init__(self):
@@ -357,7 +380,5 @@ class DomainProblem():
         return dict( self.domain.objects.items() | self.problem.objects.items() )
 
 
-
 if __name__ == '__main__':
     pass
-
