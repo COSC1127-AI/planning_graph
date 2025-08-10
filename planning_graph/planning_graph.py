@@ -111,6 +111,7 @@ class Graph(object):
 
     def visualize_png(self, filename='planning_graph.png'):
         if self.visualize:
+            
             self.dot.write_png(filename)
 
 
@@ -238,17 +239,18 @@ class PlanningGraph(object):
     @staticmethod
     def beautify_state(state) -> str:
         """set of tuples to multiple lines of string"""
-        final_string = str()
+        state_elements = []
         for atom in state:
             if isinstance(atom, NoOpAction):
                 pass
             elif isinstance(atom, Operator):
                 atom_string = atom.operator_name + ": " + str(atom.effect_pos)
-                final_string += atom_string + '\n'
+                state_elements.append(atom_string)
             else:
                 atom_string = str(atom)
-                final_string += atom_string + '\n'
-        return final_string
+                state_elements.append(atom_string)
+
+        return "\n".join(sorted(state_elements))
 
     @staticmethod
     def compute_mutex_action(pair: tuple,
