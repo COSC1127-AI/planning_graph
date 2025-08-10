@@ -101,6 +101,17 @@ class Operator():
             params = ", ".join(self.variable_list.values())
         return f"{self.operator_name}({params})"
 
+    def __repr__(self):
+        if len(self.variable_list) == 0:
+            params = ", ".join(self.variable_list.keys())
+        else:
+            params = ", ".join(self.variable_list.values())
+        name = f"{self.operator_name}({params})"
+        return (
+            f"{name} Action. Preconds={self.precondition_pos}, Effects="
+            f"{self.effect_pos}"
+        )
+
 
 class DomainListener(pddlListener):
     def __init__(self):
