@@ -111,7 +111,6 @@ class Graph(object):
 
     def visualize_png(self, filename='planning_graph.png'):
         if self.visualize:
-            
             self.dot.write_png(filename)
 
 
