@@ -48,5 +48,5 @@ if __name__ == "__main__":
         layered_plan = graph_planner.plan(graph, goal, planning_graph)
         print(f"Layered plan: {layered_plan}")
         for k in layered_plan.data:
-            plan = [x for x in layered_plan.data[k].plan if not isinstance(x, NoOpAction)]
+            plan = [str(x) for x in layered_plan.data[k].plan if not isinstance(x, NoOpAction)]
             print(k, plan)
