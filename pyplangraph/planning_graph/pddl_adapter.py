@@ -18,9 +18,9 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
-from pddlpy import DomainProblem, Operator, Atom
 from typing import Set, Tuple, List
 import itertools
+from ..pddlpy import DomainProblem, Operator, Atom
 
 
 class PlanningProblem(object):

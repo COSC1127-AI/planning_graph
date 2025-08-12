@@ -13,7 +13,7 @@ readme = { file = "README.md", content-type = "text/markdown" }
 license = { text = "Apache License, Version 2.0" }
 requires-python = ">=3.8"
 dependencies = [
-  "pydot"
+  "pydot", "antlr4-python3-runtime==4.7"
 ]
 classifiers = [
   "Programming Language :: Python :: 3",

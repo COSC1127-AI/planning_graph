@@ -1,8 +1,9 @@
-from planning_graph.planning_graph import PlanningGraph, NoOpAction
-from planning_graph.planning_graph_planner import GraphPlanner
 import argparse
 
-if __name__ == "__main__":
+from .planning_graph.planning_graph import PlanningGraph, NoOpAction
+from .planning_graph.planning_graph_planner import GraphPlanner
+
+def main():
     parser = argparse.ArgumentParser(description="Generate a planning graph for a planning problem.")
     parser.add_argument(
         "DOMAIN",
@@ -50,3 +51,7 @@ if __name__ == "__main__":
         for k in layered_plan.data:
             plan = [str(x) for x in layered_plan.data[k].plan if not isinstance(x, NoOpAction)]
             print(k, plan)
+
+
+if __name__ == "__main__":
+    main()

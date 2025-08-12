@@ -19,7 +19,7 @@ License:
     limitations under the License.
 """
 from .pddl_adapter import PlanningProblem
-from pddlpy import Operator
+from ..pddlpy import Operator
 from typing import List, Set, Tuple, Dict, Optional
 from itertools import permutations
 import pydot
