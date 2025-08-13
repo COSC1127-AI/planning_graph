@@ -18,6 +18,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
 from .planning_graph import Graph, LayeredPlan, Plan, PlanningGraph
 from typing import Optional
 
@@ -27,6 +28,7 @@ class GraphPlanner(object):
     def __init__(self):
         self._layered_plan: LayeredPlan = LayeredPlan()
         self._mutex = {}
+
     # def plan(self, gr: Graph, g: set):
     def plan(self, gr: Graph, g: set, pg: PlanningGraph):
         index = gr.num_of_levels - 1
@@ -58,7 +60,7 @@ class GraphPlanner(object):
                 return self._layered_plan
             elif gr.fixed_point:
                 try:
-                    props_mutex = self._mutex[gr.num_of_levels-1]
+                    props_mutex = self._mutex[gr.num_of_levels - 1]
                 except KeyError:
                     props_mutex = None
                 if props_mutex:
@@ -78,14 +80,14 @@ class GraphPlanner(object):
             new_goals = set()
             for action in plan.plan:
                 for proposition in action.precondition_pos:
-                    if 'adjacent' not in proposition:
+                    if "adjacent" not in proposition:
                         new_goals.add(proposition)
 
-            extracted_plan = self._extract(gr, new_goals, index-1)
+            extracted_plan = self._extract(gr, new_goals, index - 1)
             if extracted_plan is None:
                 return None
             else:
-                self._layered_plan[index-1] = extracted_plan
+                self._layered_plan[index - 1] = extracted_plan
                 self._layered_plan[index] = plan
                 return plan
         else:
@@ -99,8 +101,7 @@ class GraphPlanner(object):
                     if plan.plan:
                         mutex = False
                         for action2 in plan.plan:
-                            if (action, action2) in \
-                                    gr.act_mutexes[index]:
+                            if (action, action2) in gr.act_mutexes[index]:
                                 mutex = True
                                 break
                         if not mutex:
@@ -116,8 +117,7 @@ class GraphPlanner(object):
             while resolvers:
                 resolver = resolvers.pop()
                 plan.append(resolver)
-                plan_result = self._search(gr, g - resolver.effect_pos,
-                                           plan, index)
+                plan_result = self._search(gr, g - resolver.effect_pos, plan, index)
                 if plan_result is not None:
                     return plan_result
                 else:

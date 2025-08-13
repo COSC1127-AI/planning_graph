@@ -18,6 +18,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
 from .pddl_adapter import PlanningProblem
 from .pddlpy import Operator
 from typing import List, Set, Tuple, Dict, Optional
@@ -84,8 +85,10 @@ class NoOpAction(Operator):
         self.effect_pos.add(atom)
 
     def __repr__(self):
-        return f"NoOp Action. Preconds={self.precondition_pos}, Effects=" \
-               f"{self.effect_pos}"
+        return (
+            f"NoOp Action. Preconds={self.precondition_pos}, Effects="
+            f"{self.effect_pos}"
+        )
 
 
 class Graph(object):
@@ -109,7 +112,7 @@ class Graph(object):
         self.act_mutexes = {0: None}
         self.prop_mutexes = {0: None}
 
-    def visualize_png(self, filename='planning_graph.png'):
+    def visualize_png(self, filename="planning_graph.png"):
         if self.visualize:
             self.dot.write_png(filename)
 
@@ -141,13 +144,13 @@ class PlanningGraph(object):
                         break
                 if goal_found:
                     break
-            elif index > 0 and self._graph.prop[index-1] == proposition_list:
+            elif index > 0 and self._graph.prop[index - 1] == proposition_list:
                 self._graph.fixed_point = True
                 break
 
         return self._graph
 
-    def create_with_state(self, state: set, max_num_of_levels=10, visualize = True):
+    def create_with_state(self, state: set, max_num_of_levels=10, visualize=True):
         self._graph = Graph(visualize)
         self._graph.prop = {0: state}
         self._graph.num_of_levels = 1
@@ -169,7 +172,7 @@ class PlanningGraph(object):
                         break
                 if goal_found:
                     break
-            elif index > 0 and self._graph.prop[index-1] == proposition_list:
+            elif index > 0 and self._graph.prop[index - 1] == proposition_list:
                 self._graph.fixed_point = True
                 break
 
@@ -185,16 +188,20 @@ class PlanningGraph(object):
         # Compute Ai
         action_list = []
         for action in self._planning_problem.actions:
-            if self._applicable(action, graph_result.prop[level - 1],
-                                graph_result.prop_mutexes[level - 1]):
+            if self._applicable(
+                action,
+                graph_result.prop[level - 1],
+                graph_result.prop_mutexes[level - 1],
+            ):
                 action_list.append(action)
         for proposition in graph_result.prop[level - 1]:
             action_list.append(NoOpAction(proposition))
         graph_result.act[level] = action_list
         if graph_result.visualize:
-            edge = pydot.Edge(self.beautify_state(
-                graph_result.prop[level - 1]),
-                              self.beautify_state(graph_result.act[level]), )
+            edge = pydot.Edge(
+                self.beautify_state(graph_result.prop[level - 1]),
+                self.beautify_state(graph_result.act[level]),
+            )
             graph_result.dot.add_edge(edge)
 
         # Compute Pi
@@ -204,24 +211,27 @@ class PlanningGraph(object):
                 proposition_list.add(effect)
         graph_result.prop[level] = proposition_list
         if graph_result.visualize:
-            edge = pydot.Edge(self.beautify_state(graph_result.act[level]),
-                              self.beautify_state(graph_result.prop[level]))
+            edge = pydot.Edge(
+                self.beautify_state(graph_result.act[level]),
+                self.beautify_state(graph_result.prop[level]),
+            )
             graph_result.dot.add_edge(edge)
 
         # Compute mutex Ai
         action_mutex_list = []
         for action_pair in list(permutations(action_list, 2)):
-            if self.compute_mutex_action(action_pair,
-                                         graph_result.prop_mutexes[level - 1]):
+            if self.compute_mutex_action(
+                action_pair, graph_result.prop_mutexes[level - 1]
+            ):
                 action_mutex_list.append(action_pair)
         graph_result.act_mutexes[level] = action_mutex_list
 
         # Compute mutex Pi
         proposition_mutex_list = []
         for proposition_pair in list(permutations(proposition_list, 2)):
-            if self.compute_mutex_precondition(proposition_pair,
-                                               action_list,
-                                               action_mutex_list):
+            if self.compute_mutex_precondition(
+                proposition_pair, action_list, action_mutex_list
+            ):
                 if proposition_pair not in proposition_mutex_list:
                     swapped = (proposition_pair[1], proposition_pair[0])
                     if swapped not in proposition_mutex_list:
@@ -252,17 +262,14 @@ class PlanningGraph(object):
         return "\n".join(sorted(state_elements))
 
     @staticmethod
-    def compute_mutex_action(pair: tuple,
-                             preconds_mutex: List[Tuple[Tuple]]) -> bool:
+    def compute_mutex_action(pair: tuple, preconds_mutex: List[Tuple[Tuple]]) -> bool:
         a = pair[0]
         b = pair[1]
 
         # two actions are dependent
-        if a.effect_neg.intersection(b.precondition_pos.union(b.effect_pos)) \
-                != set():
+        if a.effect_neg.intersection(b.precondition_pos.union(b.effect_pos)) != set():
             return True
-        if b.effect_neg.intersection(a.precondition_pos.union(a.effect_pos)) \
-                != set():
+        if b.effect_neg.intersection(a.precondition_pos.union(a.effect_pos)) != set():
             return True
 
         # their preconditions are mutex
@@ -277,8 +284,7 @@ class PlanningGraph(object):
         return False
 
     @staticmethod
-    def compute_mutex_precondition(proposition_pair, action_list,
-                                   action_mutex):
+    def compute_mutex_precondition(proposition_pair, action_list, action_mutex):
         p = proposition_pair[0]
         q = proposition_pair[1]
 
@@ -314,14 +320,17 @@ class PlanningGraph(object):
         return all_mutex
 
     @staticmethod
-    def _applicable(action: Operator, state: Set[Tuple],
-                    preconditions_mutex: Optional[List[Tuple[Tuple]]]) -> bool:
-        if action.precondition_pos.issubset(state) and \
-                action.precondition_neg.isdisjoint(state):
+    def _applicable(
+        action: Operator,
+        state: Set[Tuple],
+        preconditions_mutex: Optional[List[Tuple[Tuple]]],
+    ) -> bool:
+        if action.precondition_pos.issubset(
+            state
+        ) and action.precondition_neg.isdisjoint(state):
             applicable = True
             if preconditions_mutex is not None:
-                for precondition in list(permutations(action.precondition_pos,
-                                                      2)):
+                for precondition in list(permutations(action.precondition_pos, 2)):
                     if precondition in preconditions_mutex:
                         applicable = False
                         break

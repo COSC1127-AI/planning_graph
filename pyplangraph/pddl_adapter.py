@@ -18,6 +18,7 @@ License:
     See the License for the specific language governing permissions and
     limitations under the License.
 """
+
 from typing import Set, Tuple, List
 import itertools
 from .pddlpy import DomainProblem, Operator, Atom
@@ -28,10 +29,10 @@ class PlanningProblem(object):
     def __init__(self, dom_file: str, problem_file: str):
         self._domain_file = dom_file
         self._problem_file = problem_file
-        self._domain_problem = DomainProblem(self._domain_file,
-                                             self._problem_file)
-        self._initial_state = self._to_set_of_tuples(self._domain_problem.
-                                                     initialstate())
+        self._domain_problem = DomainProblem(self._domain_file, self._problem_file)
+        self._initial_state = self._to_set_of_tuples(
+            self._domain_problem.initialstate()
+        )
         self._goal_state = self._to_set_of_tuples(self._domain_problem.goals())
         self._actions = self._get_ground_operators()
 
@@ -54,16 +55,14 @@ class PlanningProblem(object):
         ground_operators = []
         for operator in self._domain_problem.operators():
             op = self._domain_problem.domain.operators[operator]
-            for ground in self._instantiate(op.variable_list.items(),
-                                            self._domain_problem.
-                                            worldobjects()):
+            for ground in self._instantiate(
+                op.variable_list.items(), self._domain_problem.worldobjects()
+            ):
                 st = dict(ground)
                 gop = Operator(operator)
                 gop.variable_list = st
-                gop.precondition_pos = set(
-                    [a.ground(st) for a in op.precondition_pos])
-                gop.precondition_neg = set(
-                    [a.ground(st) for a in op.precondition_neg])
+                gop.precondition_pos = set([a.ground(st) for a in op.precondition_pos])
+                gop.precondition_neg = set([a.ground(st) for a in op.precondition_neg])
                 gop.effect_pos = set([a.ground(st) for a in op.effect_pos])
                 gop.effect_neg = set([a.ground(st) for a in op.effect_neg])
                 ground_operators.append(gop)
