@@ -35,7 +35,7 @@ tag_regex = "^v(?P<version>.*)$"  # version tag regex v1.0.0 (with a v in front
 Homepage = "https://github.com/COSC1127-AI/planning_graph"  # or your about["__url__"]
 
 [tool.setuptools.packages.find]
-include = ["pyplangraph", "pyplangraph.pddlpy", "pyplangraph.planning_graph"]
+include = ["pyplangraph", "pyplangraph.pddlpy"]
 
 [project.scripts]
 pyplangraph = "pyplangraph.__main__:main"

@@ -2,8 +2,8 @@ import argparse
 
 from . import VERSION
 
-from .planning_graph.planning_graph import PlanningGraph, NoOpAction
-from .planning_graph.planning_graph_planner import GraphPlanner
+from .planning_graph import PlanningGraph, NoOpAction
+from .planning_graph_planner import GraphPlanner
 
 
 def main():
