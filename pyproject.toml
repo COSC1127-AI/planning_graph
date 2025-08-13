@@ -15,7 +15,8 @@ requires-python = ">=3.8"
 dependencies = [
   "pydot", 
   "antlr4-python3-runtime>=4.7", 
-  "flake8"
+  "flake8",
+  "importlib_metadata"
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
