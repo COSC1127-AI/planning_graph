@@ -13,5 +13,5 @@ class TestGraphPlanner:
 
         goal = planning_graph.goal
         graph_planner = GraphPlanner()
-        layered_plan = graph_planner.plan(graph, goal)
+        layered_plan = graph_planner.plan(graph, goal, graph)
         assert len(layered_plan.data) == 4
