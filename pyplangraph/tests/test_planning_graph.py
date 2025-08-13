@@ -1,13 +1,13 @@
 import pytest
 
-from pyplangraph.planning_graph import (
+from ..planning_graph import (
     PlanningGraph,
     Plan,
     LayeredPlan,
     NoOpAction,
     Graph,
 )
-from pddlpy import Operator
+from ..pddlpy import Operator
 
 
 class TestPlan:

@@ -1,5 +1,5 @@
-from pyplangraph.planning_graph_planner import GraphPlanner
-from pyplangraph.planning_graph import PlanningGraph
+from ..planning_graph_planner import GraphPlanner
+from ..planning_graph import PlanningGraph
 
 
 class TestGraphPlanner:
