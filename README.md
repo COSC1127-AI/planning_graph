@@ -29,15 +29,30 @@ For development, it is best to install the package as editable: `pip install -e 
 > [!CAUTION]
 > The original repo publishes in PyPi [here](https://pypi.org/project/planning-graph/), but it is currently different from the version provided in this repo.
 
-## CLI Usage
+## Usage
 
-## As a library
+The `pyplangraph` package can be used both as a command-line tool and as a Python library.
 
-To create a Planning Graph from PDDL:
+### Command Line Interface
+
+After installation, you can use the `pyplangraph` command to generate planning graphs, its visualization, and plans:
+
+```console
+pyplangraph domain/dock-worker-robot-domain.pddl domain/dock-worker-robot-problem.pddl --output my_graph.png --max 10 --plan
+Planning graph created with Planning Graph object with 4 levels levels.
+Layered plan: LayeredPlan. Levels=4
+0 []
+1 ['load(loc2, contb, robq)', 'load(loc1, conta, robr)']
+2 ['move(robq, loc2, loc1)', 'move(robr, loc1, loc2)']
+3 ['unload(loc1, contb, robq)', 'unload(loc2, conta, robr)']
+```
+
+### As a Python Library
+
+To create a Planning Graph from PDDL files:
 
 ```python
-from planning_graph.planning_graph import PlanningGraph
-
+from pyplangraph.planning_graph.planning_graph import PlanningGraph
 
 planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
                                'domain/dock-worker-robot-problem.pddl')
@@ -45,14 +60,12 @@ planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
 graph = planning_graph.create(max_num_of_levels=10)
 ```
 
-`planning_graph.create()` returns a Graph object if the goal state is achieved, or the maximum number of levels have been reached.
+The `planning_graph.create()` method returns a Graph object if the goal state is achieved, or the maximum number of levels have been reached.
 
-To create an image visualization of the planning graph, you can set `visualize=True` (by default
-it is set to `False`) and then visualize it as a PNG image:
+To create an image visualization of the planning graph, you can set `visualize=True` (by default it is set to `False`) and then visualize it as a PNG image:
 
 ```python
-from planning_graph.planning_graph import PlanningGraph
-
+from pyplangraph.planning_graph.planning_graph import PlanningGraph
 
 planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
                                'domain/dock-worker-robot-problem.pddl',
@@ -66,14 +79,13 @@ The result looks like the following:
 
 ![alt text](domain/planning_graph.png)
 
-### Find a solution plan
+#### Finding a Solution Plan
 
-To find a solution plan you simply have to create a Planner and pass the arguments it requires.
+To find a solution plan you simply have to create a Planner and pass the arguments it requires:
 
 ```python
-from planning_graph.planning_graph import PlanningGraph
-from planning_graph.planning_graph_planner import GraphPlanner
-
+from pyplangraph.planning_graph.planning_graph import PlanningGraph
+from pyplangraph.planning_graph.planning_graph_planner import GraphPlanner
 
 planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
                                'domain/dock-worker-robot-problem.pddl')
@@ -81,10 +93,46 @@ planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
 graph = planning_graph.create(max_num_of_levels=10)
 goal = planning_graph.goal
 graph_planner = GraphPlanner()
-layered_plan = graph_planner.plan(graph, goal)
+layered_plan = graph_planner.plan(graph, goal, planning_graph)
 ```
 
 This returns a layered plan if the solution exists, otherwise, it returns `None`.
+
+#### Complete Example
+
+Here's a complete example that creates a planning graph, visualizes it, and extracts a plan:
+
+```python
+from pyplangraph.planning_graph.planning_graph import PlanningGraph, NoOpAction
+from pyplangraph.planning_graph.planning_graph_planner import GraphPlanner
+
+# Create planning graph with visualization enabled
+planning_graph = PlanningGraph('domain/dock-worker-robot-domain.pddl',
+                               'domain/dock-worker-robot-problem.pddl',
+                               visualize=True)
+
+# Generate the graph
+graph = planning_graph.create(max_num_of_levels=10)
+print(f"Planning graph created with {graph} levels.")
+
+# Save visualization
+graph.visualize_png("my_planning_graph.png")
+
+# Extract a plan
+goal = planning_graph.goal
+graph_planner = GraphPlanner()
+layered_plan = graph_planner.plan(graph, goal, planning_graph)
+
+if layered_plan is None:
+    print("No plan can be generated.")
+else:
+    print(f"Layered plan: {layered_plan}")
+    for k in layered_plan.data:
+        plan = [str(x) for x in layered_plan.data[k].plan if not isinstance(x, NoOpAction)]
+        print(f"Level {k}: {plan}")
+```
+
+**NOTE:** the above assumes the system has been installed as a package.
 
 ## pddlpy
 
