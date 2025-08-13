@@ -13,7 +13,7 @@ readme = { file = "README.md", content-type = "text/markdown" }
 license = { text = "Apache License, Version 2.0" }
 requires-python = ">=3.8"
 dependencies = [
-  "pydot", "antlr4-python3-runtime==4.7"
+  "pydot", "antlr4-python3-runtime>=4.7"
 ]
 classifiers = [
   "Programming Language :: Python :: 3",
@@ -28,7 +28,6 @@ dynamic = ["version"]
 # [tool.setuptools_scm]
 # version_file = "fondutils/__version__.py"
 
-
 [tool.setuptools_scm]
 tag_regex = "^v(?P<version>.*)$"  # version tag regex v1.0.0 (with a v in front
 
@@ -36,7 +35,7 @@ tag_regex = "^v(?P<version>.*)$"  # version tag regex v1.0.0 (with a v in front
 Homepage = "https://github.com/COSC1127-AI/planning_graph"  # or your about["__url__"]
 
 [tool.setuptools.packages.find]
-include = ["pygraphplan", "pygraphplan.pddlpy", "pygraphplan.planning_graph"]
+include = ["pyplangraph", "pyplangraph.pddlpy", "pyplangraph.planning_graph"]
 
 [project.scripts]
-fond-utils = "pygraphplan.__main__:main"
+pyplangraph = "pyplangraph.__main__:main"
