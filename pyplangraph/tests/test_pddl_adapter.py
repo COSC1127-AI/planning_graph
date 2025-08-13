@@ -1,4 +1,4 @@
-from planning_graph.pddl_adapter import PlanningProblem
+from pyplangraph.pddl_adapter import PlanningProblem
 
 
 initial_state = [("adjacent", "loc1", "loc2"),
