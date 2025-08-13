@@ -1,10 +1,13 @@
 import argparse
 
+from . import VERSION
+
 from .planning_graph.planning_graph import PlanningGraph, NoOpAction
 from .planning_graph.planning_graph_planner import GraphPlanner
 
+
 def main():
-    parser = argparse.ArgumentParser(description="Generate a planning graph for a planning problem.")
+    parser = argparse.ArgumentParser(description=f"Generate a planning graph for a planning problem - Version {VERSION}.")
     parser.add_argument(
         "DOMAIN",
         type=str,
@@ -47,6 +50,10 @@ def main():
         goal = planning_graph.goal
         graph_planner = GraphPlanner()
         layered_plan = graph_planner.plan(graph, goal, planning_graph)
+        if layered_plan is None:
+            print("No plan can be generated.")
+            exit(1)
+
         print(f"Layered plan: {layered_plan}")
         for k in layered_plan.data:
             plan = [str(x) for x in layered_plan.data[k].plan if not isinstance(x, NoOpAction)]
