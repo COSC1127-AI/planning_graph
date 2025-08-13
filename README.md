@@ -134,7 +134,17 @@ else:
 
 **NOTE:** the above assumes the system has been installed as a package.
 
-## pddlpy
+## Development
+
+### Unit testing
+
+The are located in [pyplangraph/tests](pyplangraph/tests) and can be run as follows:
+
+```console
+pytest pyplangraph/tests
+```
+
+### pddlpy
 
 `pddlpy` included in this repo is the work of Hernán M. Foffani, it is copied from [here.](https://github.com/hfoffani/pddl-lib). It is copied because it won't work when installed as a package due to wrong version of antlr4 package. There are no changes made to it.
 
